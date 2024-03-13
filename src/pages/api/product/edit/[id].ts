@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from '@/utils/prismadb';
+import prisma from "@/utils/prismadb";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req?.method !== "POST") {
+  if (req?.method !== "PUT") {
     return res.status(500).json({
       success: false,
       message: "Not this method!",
@@ -13,37 +13,23 @@ export default async function handler(
   }
 
   try {
+    const productId = (req?.query?.id as string) || "";
     const { title, description, price, quantity, images } = req?.body;
 
-    const productFound = await prisma?.product?.findMany({
+    const productFound = await prisma?.product?.update({
       where: {
-        title: title,
+        id: productId,
       },
-    });
-
-    if (productFound?.length) {
-      res?.status(500)?.json({
-        success: false,
-        message: "This product name has already exist!",
-      });
-      return;
-    }
-
-    const createdProduct = await prisma?.product?.create({
       data: {
         title,
         description,
         price: Number(price),
         quantity: Number(quantity),
-        images,
-        createdAt: new Date(),
-      },
+        images
+      }
     });
 
-    res?.status(200).json({
-      success: true,
-      data: createdProduct,
-    });
+    res?.status(200).json(productFound);
   } catch (err) {
     return res.status(500).json({
       success: false,
