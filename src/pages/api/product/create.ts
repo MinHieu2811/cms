@@ -21,6 +21,8 @@ export default async function handler(
       },
     });
 
+    console.log('redeploy');
+
     if (productFound?.length) {
       res?.status(500)?.json({
         success: false,
