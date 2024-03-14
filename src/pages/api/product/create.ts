@@ -39,7 +39,6 @@ export default async function handler(
         createdAt: new Date(),
       },
     });
-    console.log(createdProduct);
 
     res?.status(200).json({
       success: true,
