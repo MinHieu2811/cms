@@ -21,8 +21,6 @@ export default async function handler(
       },
     });
 
-    console.log('redeploy');
-
     if (productFound?.length) {
       res?.status(500)?.json({
         success: false,
@@ -42,7 +40,7 @@ export default async function handler(
       },
     });
 
-    res?.status(200).json({
+    return res?.status(200).json({
       success: true,
       data: createdProduct,
     });
