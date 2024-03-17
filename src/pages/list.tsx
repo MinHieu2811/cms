@@ -1,7 +1,17 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-import { Button, Input, Spinner, Stack, StackItem } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Input,
+  Spinner,
+  Stack,
+  StackItem,
+  VStack,
+} from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Product, ProductList } from "@/types";
 import axios from "axios";
@@ -49,19 +59,23 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <Stack>
-          {productInfo?.map((prod, index) => (
-            <StackItem key={`key-${prod?.id}-${index}`}>
-              <StackItem>{prod?.title}</StackItem>
-              <StackItem>{prod?.description}</StackItem>
-              <StackItem>Price: ${prod?.price}</StackItem>
-              <StackItem>Quantity: {prod?.quantity}</StackItem>
+        <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+          {productInfo?.map((prod: any, index: number) => (
+            <GridItem key={`key-${prod?.id}-${index}`}>
+              <Box>
+                <VStack>
+                  <StackItem>{prod?.title}</StackItem>
+                  <StackItem>{prod?.description}</StackItem>
+                  <StackItem>Price: ${prod?.price}</StackItem>
+                  <StackItem>Quantity: {prod?.quantity}</StackItem>
+                </VStack>
+              </Box>
               <StackItem>
                 <Button
                   colorScheme="teal"
                   marginLeft={2}
                   variant="link"
-                  onClick={() => router?.push(`/edit/${prod?.id || ""}`)}
+                  onClick={() => router?.push(`/edit/${prod?._id?.toString() || ""}`)}
                 >
                   Edit
                 </Button>
@@ -71,14 +85,14 @@ export default function Home() {
                   colorScheme="red"
                   marginLeft={2}
                   variant="link"
-                  onClick={() => handleDelete(prod?.id || '')}
+                  onClick={() => handleDelete(prod?._id || "")}
                 >
                   Delete
                 </Button>
               </StackItem>
-            </StackItem>
+            </GridItem>
           ))}
-        </Stack>
+        </Grid>
       </main>
     </>
   );

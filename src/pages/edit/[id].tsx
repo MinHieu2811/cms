@@ -57,7 +57,6 @@ export default function Home() {
       setProductInfo(initialProduct);
     }
   };
-  console.log(productInfo);
   return (
     <>
       <Head>

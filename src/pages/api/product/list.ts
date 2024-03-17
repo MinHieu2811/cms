@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from '@/utils/prismadb';
+import ProductSchema from "@/model/ProductModel";
+import { connectToDataBase } from "@/utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,7 +15,9 @@ export default async function handler(
 
   try {
 
-    const productFound = await prisma?.product?.findMany();
+    await connectToDataBase()
+
+    const productFound = await ProductSchema.find();
 
     res?.status(200).json({
       content: productFound,

@@ -1,5 +1,6 @@
+import ProductSchema from "@/model/ProductModel";
+import { connectToDataBase } from "@/utils";
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from '@/utils/prismadb';
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,13 +13,11 @@ export default async function handler(
     });
   }
 
+  await connectToDataBase()
+
   try {
     const productId = req?.query?.id as string
-    const productFound = await prisma?.product?.findFirst({
-      where: {
-        id: productId || ''
-      }
-    });
+    const productFound = await ProductSchema?.findById(productId)
 
     res?.status(200).json(productFound);
   } catch (err) {

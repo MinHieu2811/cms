@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/utils/prismadb";
+import ProductSchema from "@/model/ProductModel";
+import { connectToDataBase } from "@/utils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,17 +17,14 @@ export default async function handler(
     const productId = (req?.query?.id as string) || "";
     const { title, description, price, quantity, images } = req?.body;
 
-    const productFound = await prisma?.product?.update({
-      where: {
-        id: productId,
-      },
-      data: {
-        title,
-        description,
-        price: Number(price),
-        quantity: Number(quantity),
-        images
-      }
+    await connectToDataBase();
+
+    const productFound = await ProductSchema?.findByIdAndUpdate(productId, {
+      title,
+      description,
+      price: Number(price),
+      quantity: Number(quantity),
+      images,
     });
 
     res?.status(200).json(productFound);
